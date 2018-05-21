@@ -1,18 +1,18 @@
 getPR <- function(states, startDate, endDate){
   
-  #scen_state = c("Idaho", "Washington")
-  scen_state = paste(states,sep="", collapse="|")
+  scen_state = c("Washington")
+  #scen_state = paste(states,sep="", collapse="|")
   
   setwd("/dmine/data/counties/")
   
-  counties <- readShapePoly('UScounties.shp', 
+  counties <- readShapePoly('threestate_palouse.shp', 
                             proj4string=CRS
                             ("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0"))
   projection = CRS("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
   
   #counties <- counties[grep("Idaho|Washington|Oregon|Montana", counties@data$STATE_NAME),]
   
-  counties <- counties[grep(scen_state, counties@data$STATE_NAME),]
+  #counties <- counties[grep(scen_state, counties@data$STATE_NAME),]
   
   
   # use fips data from maps package
@@ -26,9 +26,9 @@ getPR <- function(states, startDate, endDate){
                      attribute = 'FIPS',
                      values = counties$FIPS)
   
-  fabric <- webdata(url = 'http://thredds.northwestknowledge.net:8080/thredds/dodsC/MET/pr/pr_1997.nc', 
+  fabric <- webdata(url = 'http://thredds.northwestknowledge.net:8080/thredds/dodsC/MET/pr/pr_2015.nc', 
                     variables = "precipitation_amount", 
-                    times = c(startDate, endDate))
+                    times = c('2015-01-01', '2015-12-31'))
   
   job <- geoknife(stencil, fabric, wait = TRUE, REQUIRE_FULL_COVERAGE=FALSE)
   check(job)

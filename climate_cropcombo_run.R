@@ -5,13 +5,13 @@ counties <- readShapePoly('UScounties.shp',
                           ("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0"))
 projection = CRS("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
 
-statez = c("Washington")
+statez = c("Oregon")
 
 
 Idaho_list1 <- c("Idaho", "Lewis", "Nez Perce", "Clearwater", "Latah", "Benewah", "Kootenai")
 Washington_list1 <- c("Douglas", "Grant", "Benton", "Franklin", "Walla Walla", "Adams", "Lincoln", "Spokane", "Whitman", "Columbia", "Garfield", "Asotin")
 Oregon_list1 <- c("Wasco", "Sherman", "Gilliam", "Morrow", "Umatilla", "Union", "Wallowa")
-setwd("/dmine/data/USDA/agmesh-scenarios/Allstates/climatematrix_summaries/")
+setwd("/dmine/data/USDA/agmesh-scenarios/Allstates/climatematrix_summaries_rev3/")
 
 for (i in statez) {
  list <- get(paste(i, "_list1", sep=""))

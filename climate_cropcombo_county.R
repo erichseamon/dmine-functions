@@ -28,7 +28,7 @@ counties <- readShapePoly('UScounties.shp',
 projection = CRS("+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
 
 statez = c("Idaho", "Washington", "Oregon")
-Idaho_list1 <- paste("Idaho", "Lewis", "Nez Perce", "Clearwater", "Latah", "Benewah", "Kootenai", sep="|")
+Idaho_list1 <- paste("Minidoka","Twin Falls","Fremont","Madison","Bingham","Power","Cassia","Bonneville","Bannock","Teton","Oneida","Franklin","Caribou","Bear Lake", sep="|")
 Washington_list1 <- paste("Okananogan", "Douglas", "Grant", "Benton", "Franklin", "Walla Walla", "Adams", "Lincoln", "Spokane", "Whitman", "Columbia", "Garfield", "Asotin", sep="|")
 Oregon_list1 <- paste("Wasco", "Sherman", "Gilliam", "Morrow", "Umatilla", "Union", "Wallowa", sep="|")
 
@@ -109,7 +109,7 @@ kk="Idaho"
 ID_counties <- assign(paste("palouse_", kk, "_counties", sep=""), palouse_Idaho_counties)
 #counties <- counties[grep(scen_state, counties@data$STATE_NAME),]
 
-counties <- rbind(ID_counties, WA_counties, OR_counties)
+counties <- rbind(ID_counties)
 
 c_statelist <- paste(counties$STATE_NAME, "_", counties$NAME, sep="")
 varr <- c("bi", "pr", "th", "pdsi", "pet", "erc", "rmin", "rmax", "tmmn", "tmmx", "srad", "sph", "vs", "fm1000", "fm100")
@@ -124,7 +124,7 @@ for (ll in c_statelist) {
   
   commodity1 <- "WHEAT"
   damage1 <- "Drought"
-  response <- "loss"
+  response <- "cube_root_loss"
   climate_variable <- jj
   
   
@@ -160,15 +160,16 @@ for (ll in c_statelist) {
       cl = cl +1
       
       
-      setwd("/dmine/data/USDA/agmesh-scenarios/Allstates/climatematrix")
+      setwd("/dmine/data/USDA/agmesh-scenarios/Allstates/climatematrix_all_Idaho/")
       file1 <- read.csv(paste(state2, "_", county1, "_", commodity1, "_", damage1, "_", ppp, ".csv", sep=""))
       climatevar <- as.data.frame(cbind((file1[climate_variable]), file1[2]))
       
       
-      setwd("/dmine/data/USDA/agmesh-scenarios/Allstates/climatematrix_summaries")
+      setwd("/dmine/data/USDA/agmesh-scenarios/Allstates/climatematrix_summaries_all_Idaho/")
       file2 <- as.data.frame(read.csv(paste(state2, "_", county1, "_", commodity1, "_", damage1, "_", response, ".csv", sep="")))
       file2 <- subset(file2, state == state2)
       file2 <- subset(file2, county == county1)
+      colnames(file2) <- c("X", "year", "damagecause", "county", "state", "commodity", response)
       
       climatevar$zscore <- scale(climatevar[1], center = TRUE, scale = TRUE)
       colnames(climatevar[3]) <- "zscore"
@@ -183,7 +184,7 @@ for (ll in c_statelist) {
       
     }
     
-    dmvector <- as.data.frame(dmvector)
+    #dmvector <- as.data.frame(dmvector[-1,])
     colnames(dmvector) <- "correlations"
     
     dmv <- which.max( dmvector[,1] )
@@ -216,8 +217,8 @@ for (ll in c_statelist) {
   #heatmap(dmvector3, Rowv=NA, Colv=NA, col = coul)
   #design_matrix_construction(state1a, county1, commodity1, damage1, climate_variable, response)
   
-  setwd("/dmine/data/USDA/agmesh-scenarios/Allstates/climatematrix_correlations")
-  write.csv(dmvector3, file = paste(state2, "_", county1, "_", commodity1, "_", damage1, "_", climate_variable, "_", "crop_commodity_loss", "_", "correlations.csv", sep=""))
+  setwd("/dmine/data/USDA/agmesh-scenarios/Allstates/climatematrix_correlations_ID_sum_precip")
+  write.csv(dmvector3, file = paste(state2, "_", county1, "_", commodity1, "_", damage1, "_", climate_variable, "_", "cube_root_loss", "_", "correlations.csv", sep=""))
   
   
   
